@@ -36,6 +36,114 @@
             overflow-x: hidden;
         }
 
+        /* Intro Section */
+        .intro-section {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(10, 14, 39, 1) 0%, rgba(5, 7, 15, 1) 50%, rgba(10, 14, 39, 1) 100%);
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .intro-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.02) 0%, rgba(255, 0, 110, 0.02) 100%);
+            pointer-events: none;
+        }
+
+        .intro-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 40px 30px;
+            max-width: 1000px;
+        }
+
+        .intro-header {
+            font-size: clamp(32px, 7vw, 64px);
+            font-weight: bold;
+            color: var(--neon-blue);
+            text-shadow: 
+                0 0 10px rgba(0, 217, 255, 0.6),
+                0 0 20px rgba(0, 217, 255, 0.4),
+                0 0 30px rgba(0, 217, 255, 0.2);
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+            line-height: 1.3;
+            animation: fadeInDown 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        .intro-header .neon-accent {
+            color: var(--neon-pink);
+            text-shadow: 
+                0 0 10px rgba(255, 0, 110, 0.6),
+                0 0 20px rgba(255, 0, 110, 0.4),
+                0 0 30px rgba(255, 0, 110, 0.2);
+        }
+
+        .intro-subtitle {
+            font-size: clamp(14px, 2vw, 20px);
+            color: var(--neon-blue);
+            opacity: 0.7;
+            text-shadow: 0 0 10px rgba(0, 217, 255, 0.4);
+            letter-spacing: 0.5px;
+            animation: fadeInUp 0.8s ease-out 0.2s forwards;
+            opacity: 0;
+            line-height: 1.6;
+        }
+
+        .highlight-hover {
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px rgba(255, 0, 110, 0.8), 0 0 20px rgba(255, 0, 110, 0.5);
+            font-weight: 600;
+            background: linear-gradient(90deg, rgba(255, 0, 110, 0.1), rgba(0, 217, 255, 0.1));
+            padding: 2px 6px;
+            border-radius: 3px;
+            animation: highlightPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes highlightPulse {
+            0%, 100% {
+                text-shadow: 0 0 10px rgba(255, 0, 110, 0.8), 0 0 20px rgba(255, 0, 110, 0.5);
+            }
+            50% {
+                text-shadow: 0 0 15px rgba(255, 0, 110, 1), 0 0 30px rgba(255, 0, 110, 0.7);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 0.7;
+                transform: translateY(0);
+            }
+        }
+
         /* Gallery Section */
         .gallery-section {
             height: 100vh;
@@ -93,6 +201,7 @@
             object-fit: cover;
             opacity: 1;
             transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
         }
 
         .image-hover {
@@ -102,6 +211,7 @@
             object-fit: cover;
             opacity: 0;
             transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
         }
 
         .image-wrapper:hover .image-main {
@@ -161,10 +271,10 @@
             50% { opacity: 1; }
         }
 
-        /* Chevron Animation */
         .chevron {
             margin-top: 5px;
             animation: chevronBounce 2s infinite;
+            display: block;
         }
 
         @keyframes chevronBounce {
@@ -172,7 +282,6 @@
             50% { transform: translateY(5px); }
         }
 
-        /* Fade In Animation on Scroll */
         .gallery-section {
             opacity: 0;
             animation: fadeInSection 0.8s ease-out forwards;
@@ -189,9 +298,125 @@
             }
         }
 
-        /* Parallax Effect */
         .image-container {
             will-change: transform;
+        }
+
+        /* Neon Glow Effects */
+        @keyframes neonPulse {
+            0%, 100% {
+                box-shadow: 0 0 30px rgba(0, 217, 255, 0.5), inset 0 0 30px rgba(0, 217, 255, 0.1);
+            }
+            50% {
+                box-shadow: 0 0 50px rgba(0, 217, 255, 0.7), inset 0 0 30px rgba(0, 217, 255, 0.15);
+            }
+        }
+
+        .image-wrapper {
+            animation: neonPulse 3s ease-in-out infinite;
+        }
+
+        /* Lightbox styles */
+        .lightbox-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 7, 15, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease-out;
+        }
+
+        .lightbox-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .lightbox-image {
+            max-width: 90vw;
+            max-height: 90vh;
+            width: auto;
+            height: auto;
+            border: 2px solid var(--neon-blue);
+            box-shadow: 0 0 50px rgba(0, 217, 255, 0.8), 0 0 100px rgba(0, 217, 255, 0.4);
+            animation: lightboxPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes lightboxPop {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Footer styles */
+        .footer {
+            width: 100%;
+            background-color: var(--dark-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 60px 30px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-title {
+            font-size: clamp(18px, 4vw, 28px);
+            font-weight: bold;
+            color: var(--neon-blue);
+            text-shadow: 0 0 15px rgba(0, 217, 255, 0.6);
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+        }
+
+        .footer-item {
+            margin: 12px 0;
+            font-size: 14px;
+            color: var(--text-light);
+            letter-spacing: 0.5px;
+        }
+
+        .footer-label {
+            color: var(--neon-pink);
+            font-weight: 600;
+            display: inline-block;
+            min-width: 150px;
+            text-align: right;
+            margin-right: 15px;
+        }
+
+        .footer-value {
+            color: var(--text-dim);
+            display: inline;
+        }
+
+        .footer-divider {
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--neon-blue), transparent);
+            margin: 30px auto;
+            opacity: 0.5;
+        }
+
+        .footer-note {
+            font-size: 12px;
+            color: var(--text-dim);
+            margin-top: 30px;
+            opacity: 0.7;
         }
 
         /* Responsive Design */
@@ -217,41 +442,37 @@
             .scroll-indicator {
                 font-size: 10px;
             }
-        }
 
-        /* Neon Glow Effects */
-        .image-wrapper {
-            animation: neonPulse 3s ease-in-out infinite;
-        }
-
-        @keyframes neonPulse {
-            0%, 100% {
-                box-shadow: 0 0 30px rgba(0, 217, 255, 0.5), inset 0 0 30px rgba(0, 217, 255, 0.1);
+            .lightbox-image {
+                max-width: 95vw;
+                max-height: 95vh;
             }
-            50% {
-                box-shadow: 0 0 50px rgba(0, 217, 255, 0.7), inset 0 0 30px rgba(0, 217, 255, 0.15);
+
+            .footer-item {
+                display: block;
+                margin: 15px 0;
+            }
+
+            .footer-label {
+                display: block;
+                margin-right: 0;
+                margin-bottom: 5px;
+                text-align: center;
+            }
+
+            .footer-value {
+                display: block;
+            }
+
+            .intro-header {
+                margin-bottom: 25px;
+            }
+
+            .intro-subtitle {
+                font-size: 16px;
             }
         }
 
-        /* Loading State */
-        @keyframes shimmer {
-            0% {
-                background-position: -1000px 0;
-            }
-            100% {
-                background-position: 1000px 0;
-            }
-        }
-
-        /* Typography Fine-tuning */
-        .artwork-info p {
-            font-size: 14px;
-            color: var(--text-dim);
-            margin-top: 8px;
-            line-height: 1.4;
-        }
-
-        /* Touch-friendly hover for mobile */
         @media (hover: none) {
             .image-wrapper:hover .image-main {
                 opacity: 1;
@@ -268,6 +489,24 @@
     </style>
 </head>
 <body>
+    <!-- Lightbox overlay -->
+    <div id="lightbox" class="lightbox-overlay">
+        <img id="lightbox-image" class="lightbox-image" alt="Fullscreen artwork">
+    </div>
+
+    <!-- Intro Section -->
+    <section class="intro-section">
+        <div class="intro-content">
+            <h1 class="intro-header">
+                Re-imagined Cyberpunk:<br>
+                <span class="neon-accent">The AI Originality</span> of Digital Art in a Web-Based Interactive Gallery
+            </h1>
+            <p class="intro-subtitle">
+                Each piece hides its origin. <span class="highlight-hover">Hover</span> to uncover what came before.
+            </p>
+        </div>
+    </section>
+
     <!-- Artwork 1: Starry Night Over the Rhône -->
     <section class="gallery-section">
         <div class="image-container">
@@ -342,6 +581,34 @@
         </div>
     </section>
 
+    <!-- Footer section -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-title">Re-Imagined Cyberpunk: The Originality of AI in Digital Art</div>
+            
+            <div class="footer-divider"></div>
+            
+            <div class="footer-item">
+                <span class="footer-label">AI Models Used:</span>
+                <span class="footer-value">DALL·E, Google Gemini</span>
+            </div>
+            
+            <div class="footer-item">
+                <span class="footer-label">Editing Tools:</span>
+                <span class="footer-value">Canva Pro, Figma</span>
+            </div>
+            
+            <div class="footer-item">
+                <span class="footer-label">Web Technologies:</span>
+                <span class="footer-value">HTML, CSS, JavaScript</span>
+            </div>
+            
+            <div class="footer-divider"></div>
+            
+            <div class="footer-note">© 2025 Cyberpunk Gallery. All rights reserved.</div>
+        </div>
+    </footer>
+
     <script>
         // Smooth parallax scroll effect
         let scrollProgress = 0;
@@ -363,15 +630,15 @@
                     const imageContainer = section.querySelector('.image-container');
                     if (imageContainer) {
                         const parallaxOffset = (1 - sectionProgress) * 15;
-                        imageContainer.style.transform = `translateY(${parallaxOffset}px)`;
+                        imageContainer.style.transform = \`translateY(\${parallaxOffset}px)\`;
                     }
                 }
             });
         });
 
         // Preload images for smooth transitions
-        const images = document.querySelectorAll('img');
-        images.forEach(img => {
+        const allImages = document.querySelectorAll('img');
+        allImages.forEach(img => {
             const preload = new Image();
             preload.src = img.src;
         });
@@ -381,6 +648,31 @@
             const firstSection = document.querySelector('.gallery-section');
             if (firstSection) {
                 firstSection.style.animationDelay = '0.1s';
+            }
+        });
+
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImage = document.getElementById('lightbox-image');
+        const images = document.querySelectorAll('.image-main, .image-hover');
+
+        images.forEach(img => {
+            img.addEventListener('click', (e) => {
+                e.stopPropagation();
+                lightboxImage.src = img.src;
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        lightbox.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = 'auto';
             }
         });
     </script>
