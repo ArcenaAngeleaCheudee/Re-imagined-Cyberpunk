@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyberpunk Art Gallery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --dark-bg: #0a0e27;
+            --darker-bg: #05070f;
+            --neon-blue: #00d9ff;
+            --neon-pink: #ff006e;
+            --neon-purple: #b60dff;
+            --text-light: #e0e0e0;
+            --text-dim: #a0a0a0;
+            --border-color: rgba(0, 217, 255, 0.2);
+            --glow-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+        }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            background-color: var(--darker-bg);
+            color: var(--text-light);
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Gallery Section */
+        .gallery-section {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--dark-bg);
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .gallery-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.03) 0%, rgba(255, 0, 110, 0.03) 100%);
+            pointer-events: none;
+        }
+
+        /* Image Container */
+        .image-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1000px;
+            overflow: hidden;
+        }
+
+        .image-wrapper {
+            position: relative;
+            width: 90%;
+            height: 90%;
+            max-width: 1200px;
+            border: 2px solid var(--neon-blue);
+            box-shadow: 0 0 30px rgba(0, 217, 255, 0.5), inset 0 0 30px rgba(0, 217, 255, 0.1);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--darker-bg);
+        }
+
+        .image-main {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 1;
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .image-hover {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .image-wrapper:hover .image-main {
+            opacity: 0;
+        }
+
+        .image-wrapper:hover .image-hover {
+            opacity: 1;
+        }
+
+        /* Artwork Title and Info */
+        .artwork-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(5, 7, 15, 0.95), transparent);
+            padding: 40px 30px 30px;
+            transform: translateY(100%);
+            transition: transform 0.5s ease-out;
+            z-index: 10;
+        }
+
+        .image-wrapper:hover .artwork-info {
+            transform: translateY(0);
+        }
+
+        .artwork-title {
+            font-size: clamp(20px, 5vw, 40px);
+            font-weight: bold;
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+            margin-bottom: 10px;
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            color: var(--text-dim);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            animation: fadeInOut 2.5s ease-in-out infinite;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .gallery-section:first-child .scroll-indicator {
+            opacity: 1;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Chevron Animation */
+        .chevron {
+            margin-top: 5px;
+            animation: chevronBounce 2s infinite;
+        }
+
+        @keyframes chevronBounce {
+            0%, 100% { transform: translateY(-5px); }
+            50% { transform: translateY(5px); }
+        }
+
+        /* Fade In Animation on Scroll */
+        .gallery-section {
+            opacity: 0;
+            animation: fadeInSection 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeInSection {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Parallax Effect */
+        .image-container {
+            will-change: transform;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .image-wrapper {
+                border-width: 1px;
+                width: 95%;
+                height: 80%;
+            }
+
+            .artwork-info {
+                padding: 30px 20px 20px;
+            }
+
+            .artwork-title {
+                font-size: 24px;
+            }
+
+            .gallery-section {
+                height: 100vh;
+            }
+
+            .scroll-indicator {
+                font-size: 10px;
+            }
+        }
+
+        /* Neon Glow Effects */
+        .image-wrapper {
+            animation: neonPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes neonPulse {
+            0%, 100% {
+                box-shadow: 0 0 30px rgba(0, 217, 255, 0.5), inset 0 0 30px rgba(0, 217, 255, 0.1);
+            }
+            50% {
+                box-shadow: 0 0 50px rgba(0, 217, 255, 0.7), inset 0 0 30px rgba(0, 217, 255, 0.15);
+            }
+        }
+
+        /* Loading State */
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+
+        /* Typography Fine-tuning */
+        .artwork-info p {
+            font-size: 14px;
+            color: var(--text-dim);
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+
+        /* Touch-friendly hover for mobile */
+        @media (hover: none) {
+            .image-wrapper:hover .image-main {
+                opacity: 1;
+            }
+
+            .image-wrapper:hover .image-hover {
+                opacity: 0;
+            }
+
+            .image-wrapper:hover .artwork-info {
+                transform: translateY(100%);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Artwork 1: Starry Night Over the Rhône -->
+    <section class="gallery-section">
+        <div class="image-container">
+            <div class="image-wrapper">
+                <img src="https://i.imgur.com/SSPfkTI.png" alt="Starry Night Over the Rhône" class="image-main">
+                <img src="https://i.imgur.com/VJ6ugpF.png" alt="Starry Night Over the Rhône Hover" class="image-hover">
+                <div class="artwork-info">
+                    <div class="artwork-title">Starry Night Over the Rhône</div>
+                    <p>A serene nocturnal landscape bathed in celestial light</p>
+                </div>
+            </div>
+            <div class="scroll-indicator">
+                Scroll to explore <br>
+                <span class="chevron">▼</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Artwork 2: The Great Wave off Kanagawa -->
+    <section class="gallery-section">
+        <div class="image-container">
+            <div class="image-wrapper">
+                <img src="https://i.imgur.com/wwr2uoU.png" alt="The Great Wave off Kanagawa" class="image-main">
+                <img src="https://i.imgur.com/mrU4FU2.png" alt="The Great Wave off Kanagawa Hover" class="image-hover">
+                <div class="artwork-info">
+                    <div class="artwork-title">The Great Wave off Kanagawa</div>
+                    <p>An iconic depiction of nature's raw power and beauty</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Artwork 3: Nighthawks -->
+    <section class="gallery-section">
+        <div class="image-container">
+            <div class="image-wrapper">
+                <img src="https://i.imgur.com/No51o2o.png" alt="Nighthawks" class="image-main">
+                <img src="https://i.imgur.com/bBOxSdp.png" alt="Nighthawks Hover" class="image-hover">
+                <div class="artwork-info">
+                    <div class="artwork-title">Nighthawks</div>
+                    <p>An intimate glimpse into urban solitude and connection</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Artwork 4: The Storm on the Sea of Galilee -->
+    <section class="gallery-section">
+        <div class="image-container">
+            <div class="image-wrapper">
+                <img src="https://i.imgur.com/1gkKmLq.png" alt="The Storm on the Sea of Galilee" class="image-main">
+                <img src="https://i.imgur.com/FYmqFUh.png" alt="The Storm on the Sea of Galilee Hover" class="image-hover">
+                <div class="artwork-info">
+                    <div class="artwork-title">The Storm on the Sea of Galilee</div>
+                    <p>A dramatic encounter between human struggle and divine forces</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Artwork 5: Café Terrace at Night -->
+    <section class="gallery-section">
+        <div class="image-container">
+            <div class="image-wrapper">
+                <img src="https://i.imgur.com/tLjSNG0.png" alt="Café Terrace at Night" class="image-main">
+                <img src="https://i.imgur.com/5iaLe6m.png" alt="Café Terrace at Night Hover" class="image-hover">
+                <div class="artwork-info">
+                    <div class="artwork-title">Café Terrace at Night</div>
+                    <p>An enchanting moment of warmth and human presence in the darkness</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Smooth parallax scroll effect
+        let scrollProgress = 0;
+        
+        window.addEventListener('scroll', () => {
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+            scrollProgress = window.scrollY / (documentHeight - windowHeight);
+
+            const sections = document.querySelectorAll('.gallery-section');
+            sections.forEach((section, index) => {
+                const rect = section.getBoundingClientRect();
+                const sectionProgress = (windowHeight - rect.top) / windowHeight;
+
+                if (sectionProgress > 0 && sectionProgress < 2) {
+                    section.style.opacity = Math.min(1, sectionProgress);
+                    
+                    // Subtle parallax effect
+                    const imageContainer = section.querySelector('.image-container');
+                    if (imageContainer) {
+                        const parallaxOffset = (1 - sectionProgress) * 15;
+                        imageContainer.style.transform = `translateY(${parallaxOffset}px)`;
+                    }
+                }
+            });
+        });
+
+        // Preload images for smooth transitions
+        const images = document.querySelectorAll('img');
+        images.forEach(img => {
+            const preload = new Image();
+            preload.src = img.src;
+        });
+
+        // Fade in on load
+        window.addEventListener('load', () => {
+            const firstSection = document.querySelector('.gallery-section');
+            if (firstSection) {
+                firstSection.style.animationDelay = '0.1s';
+            }
+        });
+    </script>
+</body>
+</html>
